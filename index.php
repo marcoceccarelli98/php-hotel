@@ -38,9 +38,9 @@
     ];
 
     // FILTERS
-    $filters[] = $_GET['parking']; //0
+    $filters[] = $_GET['parking']; // 0
+    $filters[] = intval($_GET['vote']);    // 1
 
-    echo $filters[0];
 
     foreach($filters as $key => $filter){
         echo $filter;
@@ -48,24 +48,41 @@
 
     foreach($hotels as $hotel){
         foreach($hotel as $key => $value){
+            // PARKING
             if($key == "parking"){
                 if($filters[0] != "null"){
                     if($filters[0] === "true"){
                         if($value){
-                            $filtHotels[] = $hotel;
+                            $parkingHotels[] = $hotel;
                         }
                     }else{
                         if(!$value){
-                            $filtHotels[] = $hotel;
+                            $parkingHotels[] = $hotel;
                         }
                     }
                 }else{
-                    $filtHotels[] = $hotel;
+                    $parkingHotels[] = $hotel;
                 }
             }
         }
     }
 
+    foreach($hotels as $hotel){
+        foreach($hotel as $key => $value){
+            // VOTE
+            if($key == "vote"){
+                if($filters[1] != "null"){
+                    if($filters[1] <= $value){                       
+                        $voteHotels[] = $hotel;                       
+                    }
+                }else{
+                    $voteHotels[] = $hotel;
+                }
+            }
+        }
+    }
+
+    
 
 ?>
 
@@ -91,17 +108,17 @@
                     </select>
                 </div>
 
-                <!-- <div class="col-2">
+                <div class="col-2">
                     <h6>Vote</h6>
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>-</option>
+                    <select name="vote" class="form-select" aria-label="Default select example">
+                        <option value="null" selected>-</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
-                </div> -->
+                </div>
                 <div class="col-2">
                     <button class="btn btn-primary">Filter</button>
                 </div>
@@ -113,7 +130,7 @@
                 <thead>
                     <?php 
                         echo "<tr>";
-                        foreach($filtHotels[0] as $key => $hotel){
+                        foreach($voteHotels[0] as $key => $hotel){
                             echo "<th>" . str_replace("_", " ", ucfirst($key)) . "</th>";
                         };
                         echo "</tr>";
@@ -121,7 +138,7 @@
                 </thead>
                 <tbody>
                     <?php 
-                        foreach($filtHotels as $hotel){
+                        foreach($voteHotels as $hotel){
                             echo "<tr>";
                             foreach($hotel as $key => $value){
                                 if($key == "parking"){
