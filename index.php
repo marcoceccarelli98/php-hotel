@@ -42,10 +42,7 @@
     $filters[] = intval($_GET['vote']);    // 1
 
 
-    foreach($filters as $key => $filter){
-        echo $filter;
-    }
-
+    // FILTER HOTELS FOR PARKING
     foreach($hotels as $hotel){
         foreach($hotel as $key => $value){
             // PARKING
@@ -67,6 +64,7 @@
         }
     }
 
+    // FILTER HOTELS FOR VOTE
     foreach($hotels as $hotel){
         foreach($hotel as $key => $value){
             // VOTE
@@ -82,7 +80,21 @@
         }
     }
 
+    // MERGE FILTERS
+    foreach ($parkingHotels as $hotel1) {
+        foreach ($voteHotels as $hotel2) {
+            if ($hotel1["name"] === $hotel2["name"]) {
+                $filtHotels[] = $hotel1;
+                break;
+            }
+        }
+    }
+
+    // $filtHotels = array_intersect($parkingHotels,$voteHotels);
     
+    // foreach($filtHotels as $key => $hotel){
+    //     echo $hotel;
+    // }
 
 ?>
 
@@ -130,7 +142,7 @@
                 <thead>
                     <?php 
                         echo "<tr>";
-                        foreach($voteHotels[0] as $key => $hotel){
+                        foreach($filtHotels[0] as $key => $hotel){
                             echo "<th>" . str_replace("_", " ", ucfirst($key)) . "</th>";
                         };
                         echo "</tr>";
@@ -138,7 +150,7 @@
                 </thead>
                 <tbody>
                     <?php 
-                        foreach($voteHotels as $hotel){
+                        foreach($filtHotels as $hotel){
                             echo "<tr>";
                             foreach($hotel as $key => $value){
                                 if($key == "parking"){
