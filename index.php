@@ -36,6 +36,37 @@
             'distance_to_center' => 50
         ],
     ];
+
+    // FILTERS
+    $filters[] = $_GET['parking']; //0
+
+    echo $filters[0];
+
+    foreach($filters as $key => $filter){
+        echo $filter;
+    }
+
+    foreach($hotels as $hotel){
+        foreach($hotel as $key => $value){
+            if($key == "parking"){
+                if($filters[0] != "null"){
+                    if($filters[0] === "true"){
+                        if($value){
+                            $filtHotels[] = $hotel;
+                        }
+                    }else{
+                        if(!$value){
+                            $filtHotels[] = $hotel;
+                        }
+                    }
+                }else{
+                    $filtHotels[] = $hotel;
+                }
+            }
+        }
+    }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -50,15 +81,16 @@
         <div class="container m-auto">
             <!-- ----- FILTERS ----- -->
             <h2>Filters</h2>
-            <div class="row border p-4">
+            <form class="row align-items-end border p-4">
                 <div class="col-2">
                     <h6>Parking</h6>
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>-</option>
+                    <select name="parking" class="form-select" aria-label="Default select example">
+                        <option value="null" selected>-</option>
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
                 </div>
+
                 <!-- <div class="col-2">
                     <h6>Vote</h6>
                     <select class="form-select" aria-label="Default select example">
@@ -70,7 +102,10 @@
                         <option value="5">5</option>
                     </select>
                 </div> -->
-            </div>
+                <div class="col-2">
+                    <button class="btn btn-primary">Filter</button>
+                </div>
+            </form>
 
             <!-- ----- TABLE ----- -->
             <h1 class="mt-4">Hotels</h1>
@@ -78,7 +113,7 @@
                 <thead>
                     <?php 
                         echo "<tr>";
-                        foreach($hotels[0] as $key => $hotel){
+                        foreach($filtHotels[0] as $key => $hotel){
                             echo "<th>" . str_replace("_", " ", ucfirst($key)) . "</th>";
                         };
                         echo "</tr>";
@@ -86,7 +121,7 @@
                 </thead>
                 <tbody>
                     <?php 
-                        foreach($hotels as $hotel){
+                        foreach($filtHotels as $hotel){
                             echo "<tr>";
                             foreach($hotel as $key => $value){
                                 if($key == "parking"){
