@@ -49,7 +49,8 @@
     <?php
     foreach($hotels as $hotel){
         foreach($hotel as $key => $value){
-            echo ucfirst($key) . " :";
+            //Print key
+            echo str_replace("_", " ", ucfirst($key)) . " :";
             if($key == "parking"){
                 if($value == true){
                     echo " Yes";
